@@ -197,3 +197,84 @@ double calculateSST(double amount) {
     const double SST_RATE = 0.06;
     return amount * SST_RATE;
 }
+
+distance = getAutomaticDistance();
+    deliveryFee = calculateDeliveryFee(distance);
+
+    for (int i = 0; i < itemCount; i++) {
+        subtotal += cart[i].price;
+    }
+
+    cout << "\nDo you have a promo code? (Enter code or press 'Enter' to skip): ";
+    cin.clear();
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
+    getline(cin, promoInput);
+
+    if (!promoInput.empty()) {
+        applyPromoEngine(promoInput, subtotal, discount, deliveryFee);
+    }
+
+    sstAmount = calculateSST(subtotal - discount);
+    totalFinalBill = (subtotal - discount) + sstAmount + deliveryFee;
+
+    if (totalFinalBill < 0.0) totalFinalBill = 0.0;
+
+    cout << "\n==========================================" << endl;
+    cout << "             FINAL ORDER RECEIPT          " << endl;
+    cout << "==========================================" << endl;
+    cout << fixed << setprecision(2);
+
+    for (int i = 0; i < itemCount; i++) {
+        cout << left << setw(32) << cart[i].name << "RM " << cart[i].price << endl;
+        if (!cart[i].customOptions.empty()) {
+            cout << "  * Preferences: " << cart[i].customOptions << endl;
+        }
+    }
+
+    cout << "------------------------------------------" << endl;
+    cout << left << setw(32) << "Cart Subtotal:" << "RM " << subtotal << endl;
+
+    if (discount > 0.0) {
+        cout << left << setw(32) << "Voucher Discount:" << "-RM " << discount << endl;
+    }
+
+    string distStr = to_string(distance);
+    distStr = distStr.substr(0, distStr.find(".") + 3);
+    cout << left << setw(32) << ("Delivery Fee (" + distStr + " km):") << "RM " << deliveryFee << endl;
+    cout << left << setw(32) << "SST Government Tax (6%):" << "RM " << sstAmount << endl;
+    cout << "------------------------------------------" << endl;
+    cout << left << setw(32) << "TOTAL AMOUNT DUE:" << "RM " << totalFinalBill << endl;
+    cout << "==========================================" << endl;
+
+    simulatePaymentGateway(totalFinalBill);
+
+    return 0;
+}
+
+void displayHeader() {
+    cout << "==================================================" << endl;
+    cout << "     MALAYSIAN ONLINE FOOD DELIVERY SYSTEM        " << endl;
+    cout << "==================================================" << endl;
+}
+
+void simulatePaymentGateway(double finalBill) {
+    cout << "\n>>> SECURE DIGITAL PAYMENT GATEWAY <<<" << endl;
+    cout << "Select your preferred settlement pathway:" << endl;
+    cout << "1. Digital Bank Account (Seamless Online Transfer)" << endl;
+    cout << "2. Local FPX Primary Bank Node" << endl;
+    cout << "3. Cash On Delivery (COD)" << endl;
+    cout << "4. Cancel Transaction & Exit" << endl;
+
+    int payChoice = getBoundedInteger("Select payment method (1-4): ", 1, 4);
+
+    if (payChoice == 4) {
+        cout << "\n[ABORTED] Secure checkout session ended. Transaction has been voided. Goodbye!" << endl;
+        exit(0);
+    }
+
+    cout << "\nProcessing transaction of RM " << finalBill << " ... please wait." << endl;
+    cout << "[SUCCESS] Secure transaction authenticated successfully!" << endl;
+    cout << "Rider assigned to kitchen hub. Thank you for your order!" << endl;
+}
