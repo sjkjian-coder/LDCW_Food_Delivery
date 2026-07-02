@@ -108,3 +108,56 @@ int main() {
         cout << "\nCheckout failed. No items found in your shopping cart." << endl;
         return 0;
     }
+
+bool processLocalDelights(CartItem &item) {
+    string prompt = "\n--- Local Malaysian Delights ---\n1. Char Siew Rice (RM 9.50)\n2. Wonton Noodles (RM 8.50)\n3. Pan Mee Dry (RM 10.00)\n4. Go Back to Main Menu\nEnter choice (1-4): ";
+    int choice = getBoundedInteger(prompt, 1, 4);
+
+    if (choice == 4) return false;
+
+    if (choice == 1) { item.name = "Char Siew Rice"; item.price = 9.50; }
+    else if (choice == 2) { item.name = "Wonton Noodles"; item.price = 8.50; }
+    else { item.name = "Pan Mee Dry"; item.price = 10.00; }
+
+    item.customOptions = "Standard Serving";
+    return true;
+}
+
+bool processFastFood(CartItem &item) {
+    string prompt = "\n--- Fast Food Burgers & Combos ---\n1. Spicy Chicken Burger Combo (RM 15.50)\n2. Ayam Goreng McD Spicy Combo (RM 17.00)\n3. Go Back to Main Menu\nEnter choice (1-3): ";
+    int choice = getBoundedInteger(prompt, 1, 3);
+
+    if (choice == 3) return false;
+
+    if (choice == 1) {
+        item.name = "Spicy Chicken Burger Combo";
+        item.price = 15.50;
+        int custom = getBoundedInteger("Exclude lettuce? (1 for Yes, 0 for No): ", 0, 1);
+        if (custom == 1) item.customOptions = "No Lettuce Customization";
+        else item.customOptions = "Standard Recipe";
+    } else {
+        item.name = "Ayam Goreng McD Spicy Combo";
+        item.price = 17.00;
+        item.customOptions = "Standard Recipe";
+    }
+    return true;
+}
+
+bool processBeverages(CartItem &item) {
+    string prompt = "\n--- Beverages & Milk Tea ---\n1. White Peach Oolong Milk Tea (RM 12.00)\n2. Snowy Coco Oreo Smoothie (RM 13.50)\n3. Go Back to Main Menu\nEnter choice (1-3): ";
+    int choice = getBoundedInteger(prompt, 1, 3);
+
+    if (choice == 3) return false;
+
+    if (choice == 1) { item.name = "White Peach Oolong Milk Tea"; item.price = 12.00; }
+    else { item.name = "Snowy Coco Oreo Smoothie"; item.price = 13.50; }
+
+    int sugar = getBoundedInteger("\nSelect Sugar Level:\n1. Normal Sugar\n2. Less Sweet\n3. Slightly Sweet\nEnter choice (1-3): ", 1, 3);
+    int ice = getBoundedInteger("Select Ice Level:\n1. Normal Ice\n2. Less Ice\n3. No Ice\nEnter choice (1-3): ", 1, 3);
+
+    string sugarStr = (sugar == 2) ? "Less Sweet" : (sugar == 3) ? "Slightly Sweet" : "Normal Sugar";
+    string iceStr = (ice == 2) ? "Less Ice" : (ice == 3) ? "No Ice" : "Normal Ice";
+
+    item.customOptions = sugarStr + ", " + iceStr;
+    return true;
+}
