@@ -25,3 +25,24 @@ bool processBeverages(CartItem &item);
 void applyPromoEngine(string code, double subtotal, double &discount, double &deliveryFee);
 double calculateSST(double amount);
 void simulatePaymentGateway(double finalBill);
+
+void clearInputStream() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+int getBoundedInteger(string prompt, int minVal, int maxVal) {
+    int inputVal;
+    while (true) {
+        cout << prompt;
+        cin >> inputVal;
+
+        if (cin.fail() || inputVal < minVal || inputVal > maxVal) {
+            cout << "\n[ERROR] Invalid entry! Please enter an integer between "
+                 << minVal << " and " << maxVal << ".\n" << endl;
+            clearInputStream();
+        } else {
+            return inputVal;
+        }
+    }
+}
