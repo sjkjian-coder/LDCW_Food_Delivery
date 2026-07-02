@@ -161,3 +161,39 @@ bool processBeverages(CartItem &item) {
     item.customOptions = sugarStr + ", " + iceStr;
     return true;
 }
+
+double getAutomaticDistance() {
+    cout << "\n[GPS System] Synchronizing with local telecommunication masts..." << endl;
+    cout << "[GPS System] Retrieving user coordinate points via device location API..." << endl;
+    double simulatedDistance = 4.25;
+    cout << "[GPS System] SUCCESS: Current delivery distance auto-calculated: " << simulatedDistance << " km" << endl;
+    return simulatedDistance;
+}
+
+double calculateDeliveryFee(double distance) {
+    if (distance <= 2.0) return 3.00;
+    else if (distance > 2.0 && distance <= 5.0) return 5.00;
+    else if (distance > 5.0 && distance <= 10.0) return 8.00;
+    else return 12.00;
+}
+
+void applyPromoEngine(string code, double subtotal, double &discount, double &deliveryFee) {
+    if (code == "MAKAN5") {
+        if (subtotal >= 10.00) {
+            discount = 5.00;
+            cout << "[SUCCESS] Flat RM 5.00 discount applied smoothly!" << endl;
+        } else {
+            cout << "[REJECTED] 'MAKAN5' requires a minimum spending threshold of RM 10.00." << endl;
+        }
+    } else if (code == "FREEDEL") {
+        deliveryFee = 0.00;
+        cout << "[SUCCESS] Shipping promo applied! Delivery fee has been completely waived." << endl;
+    } else {
+        cout << "[NOTICE] Invalid voucher code entered. Proceeding without discount profiles." << endl;
+    }
+}
+
+double calculateSST(double amount) {
+    const double SST_RATE = 0.06;
+    return amount * SST_RATE;
+}
